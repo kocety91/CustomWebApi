@@ -1,5 +1,6 @@
 ﻿using CustomWebApi.Models;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace CustomWebApi.Services
 {
@@ -7,5 +8,6 @@ namespace CustomWebApi.Services
     {
         Task<Artist> GetByIdAsync(int id);
 
+        Task<IEnumerable<Artist>> GetAllAsync();
     }
 }
