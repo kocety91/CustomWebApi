@@ -9,5 +9,7 @@ namespace CustomWebApi.Services
         Task<Artist> GetByIdAsync(int id);
 
         Task<IEnumerable<Artist>> GetAllAsync();
+
+        Task CreateAsync(Artist artist);  
     }
 }

@@ -18,6 +18,22 @@ namespace CustomWebApi.Services
             _context = context;
         }
 
+        public async Task CreateAsync(Artist artist)
+        {
+           if (artist == null)
+           {
+                throw new NullReferenceException(nameof(artist));
+           }
+
+           if (_context.Artists.Any(x => x.FirstName == artist.FirstName && x.LastName == artist.LastName))
+           {
+                throw new ArgumentException(ArtistAlreadyExist);
+           }
+
+           await _context.Artists.AddAsync(artist);
+           await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Artist>> GetAllAsync()
         {
             var allArtists = await _context.Artists.ToListAsync();

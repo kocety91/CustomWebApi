@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using CustomWebApi.Dtos.Artists;
+using CustomWebApi.Models;
 using CustomWebApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CustomWebApi.Controllers
@@ -24,7 +23,7 @@ namespace CustomWebApi.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}" , Name = "GetById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ArtistDto>> GetById(int id)
@@ -43,6 +42,17 @@ namespace CustomWebApi.Controllers
             return Ok(_mapper.Map<IEnumerable<ArtistDto>>(artists));
         }
 
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ArtistDto>> Create(CreateArtistDto source)
+        {
+            var dtoToProduct = _mapper.Map<Artist>(source);
+            await  _artistService.CreateAsync(dtoToProduct);
 
+            var redirectDto = _mapper.Map<ArtistDto>(dtoToProduct);
+
+            return CreatedAtRoute(nameof(GetById), new { id = redirectDto.Id }, redirectDto);
+        }
     }
 }
