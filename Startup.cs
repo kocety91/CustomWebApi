@@ -1,4 +1,5 @@
 using CustomWebApi.Data;
+using CustomWebApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,6 +37,9 @@ namespace CustomWebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomWebApi", Version = "v1" });
             });
+
+
+            services.AddTransient<IArtistService, ArtistService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
