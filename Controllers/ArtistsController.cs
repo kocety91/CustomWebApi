@@ -3,6 +3,7 @@ using CustomWebApi.Dtos.Artists;
 using CustomWebApi.Models;
 using CustomWebApi.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -57,20 +58,48 @@ namespace CustomWebApi.Controllers
 
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ArtistDto>> Update(int id, UpdateArtistDto source)
         {
             var artist = await _artistService.GetByIdAsync(id);
-
-            if (artist == null)
-            {
-                return this.NotFound();
-            }
 
             _mapper.Map(source, artist);
             await _artistService.UpdateAsync(artist);
 
             return NoContent();
         }
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+
+        public async Task<ActionResult> PartialUpdate(int id, JsonPatchDocument<UpdateArtistDto> patchDoc)
+        {
+            var artist = await _artistService.GetByIdAsync(id);
+
+
+            var artistToPatch = _mapper.Map<UpdateArtistDto>(artist);
+            patchDoc.ApplyTo(artistToPatch, ModelState);
+
+            if (!TryValidateModel(artistToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(artistToPatch, artist);
+            await _artistService.UpdateAsync(artist);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var artist = await _artistService.GetByIdAsync(id);
+
+            await _artistService.DeleteAsync(artist);
+
+            return NoContent();
+        }
+
     }
 }

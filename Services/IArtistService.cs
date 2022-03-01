@@ -13,5 +13,7 @@ namespace CustomWebApi.Services
         Task CreateAsync(Artist artist);
 
         Task UpdateAsync(Artist artist);
+
+        Task DeleteAsync(Artist artist);
     }
 }

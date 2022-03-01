@@ -34,6 +34,19 @@ namespace CustomWebApi.Services
            await _context.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(Artist artist)
+        {
+            var deleteArtist = _context.Artists.FirstOrDefault(x => x.Id == artist.Id);
+
+            if (deleteArtist == null)
+            {
+                throw new ArgumentException(ArtistDoesntExist);
+            }
+
+            _context.Artists.Remove(deleteArtist);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Artist>> GetAllAsync()
         {
             var allArtists = await _context.Artists.ToListAsync();
