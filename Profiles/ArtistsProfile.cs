@@ -10,6 +10,7 @@ namespace CustomWebApi.Profiles
         {
             CreateMap<Artist, ArtistDto>();
             CreateMap<CreateArtistDto, Artist>();
+            CreateMap<UpdateArtistDto, Artist>();
         }
     }
 }

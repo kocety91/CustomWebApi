@@ -58,6 +58,15 @@ namespace CustomWebApi.Services
             return artist;
         }
 
+        public async Task UpdateAsync(Artist artist)
+        {
+            if (artist == null)
+            {
+                throw new ArgumentException(ArtistDoesntExist);
+            }
 
+            _context.Artists.Update(artist);
+            await _context.SaveChangesAsync();
+        }
     }
 }

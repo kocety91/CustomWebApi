@@ -23,14 +23,14 @@ namespace CustomWebApi.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}" , Name = "GetById")]
+        [HttpGet("{id}", Name = "GetById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ArtistDto>> GetById(int id)
         {
             var artist = await _artistService.GetByIdAsync(id);
 
-           return Ok(_mapper.Map<ArtistDto>(artist));
+            return Ok(_mapper.Map<ArtistDto>(artist));
         }
 
         [HttpGet]
@@ -48,11 +48,29 @@ namespace CustomWebApi.Controllers
         public async Task<ActionResult<ArtistDto>> Create(CreateArtistDto source)
         {
             var dtoToProduct = _mapper.Map<Artist>(source);
-            await  _artistService.CreateAsync(dtoToProduct);
+            await _artistService.CreateAsync(dtoToProduct);
 
             var redirectDto = _mapper.Map<ArtistDto>(dtoToProduct);
 
             return CreatedAtRoute(nameof(GetById), new { id = redirectDto.Id }, redirectDto);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ArtistDto>> Update(int id, UpdateArtistDto source)
+        {
+            var artist = await _artistService.GetByIdAsync(id);
+
+            if (artist == null)
+            {
+                return this.NotFound();
+            }
+
+            _mapper.Map(source, artist);
+            await _artistService.UpdateAsync(artist);
+
+            return NoContent();
         }
     }
 }
