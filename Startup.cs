@@ -1,3 +1,4 @@
+using AutoMapper;
 using CustomWebApi.Data;
 using CustomWebApi.Services;
 using Microsoft.AspNetCore.Builder;
@@ -38,7 +39,7 @@ namespace CustomWebApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomWebApi", Version = "v1" });
             });
 
-
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddTransient<IArtistService, ArtistService>();
         }
 
