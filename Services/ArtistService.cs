@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static CustomWebApi.Common.ErrorMessage.Artist;
 
 namespace CustomWebApi.Services
 {
@@ -19,7 +20,14 @@ namespace CustomWebApi.Services
 
         public async Task<IEnumerable<Artist>> GetAllAsync()
         {
-            return await _context.Artists.ToListAsync();
+            var allArtists = await _context.Artists.ToListAsync();
+
+            if (allArtists == null)
+            {
+                throw new ArgumentException(NoArtists);
+            }
+
+            return allArtists;
         }
 
         public async Task<Artist> GetByIdAsync(int id)
@@ -28,7 +36,7 @@ namespace CustomWebApi.Services
 
             if (artist == null)
             {
-                throw new ArgumentException();
+                throw new ArgumentException(ArtistDoesntExist);
             }
 
             return artist;
