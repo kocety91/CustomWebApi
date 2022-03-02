@@ -49,7 +49,7 @@ namespace CustomWebApi.Services
 
         public async Task<IEnumerable<Artist>> GetAllAsync()
         {
-            var allArtists = await _context.Artists.ToListAsync();
+            var allArtists = await _context.Artists.Include(x => x.Songs).AsNoTracking().ToListAsync();
 
             if (allArtists == null)
             {
@@ -61,7 +61,7 @@ namespace CustomWebApi.Services
 
         public async Task<Artist> GetByIdAsync(int id)
         {
-            var artist = await _context.Artists.FirstOrDefaultAsync(x => x.Id == id);
+            var artist = await _context.Artists.Include(x => x.Songs).AsNoTracking().FirstOrDefaultAsync();
 
             if (artist == null)
             {

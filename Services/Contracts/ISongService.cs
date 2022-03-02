@@ -7,5 +7,7 @@ namespace CustomWebApi.Services.Contracts
     public interface ISongService
     {
         Task<IEnumerable<Song>> GetAllSongsAsync();
+
+        Task<IEnumerable<Song>> GetSongsByArtistIdAsync(int artistId);
     }
 }

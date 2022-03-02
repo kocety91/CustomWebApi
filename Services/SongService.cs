@@ -4,6 +4,7 @@ using CustomWebApi.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using static CustomWebApi.Common.ErrorMessage.Song;
 
@@ -22,6 +23,20 @@ namespace CustomWebApi.Services
             var songs = await _context.Songs.ToListAsync();
 
             if ( songs == null)
+            {
+                throw new ArgumentException(NoSongs);
+            }
+
+            return songs;
+        }
+
+        public async Task<IEnumerable<Song>> GetSongsByArtistIdAsync(int artistId)
+        {
+            var songs = await _context.Songs.Where(x => x.ArtistId == artistId)
+                .Include(x => x.Artist.FirstName + x.Artist.LastName)
+                .ToListAsync();
+
+            if(songs == null)
             {
                 throw new ArgumentException(NoSongs);
             }

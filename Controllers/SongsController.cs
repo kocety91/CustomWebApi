@@ -23,11 +23,22 @@ namespace CustomWebApi.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<SongDto>>> GetAll()
         {
             var songs = await _songsServerice.GetAllSongsAsync();
+
+            return Ok(_mapper.Map<IEnumerable<SongDto>>(songs));
+        }
+
+
+        [HttpGet("{id}", Name = "GetSongByArtistId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<SongDto>> GetSongByArtistId(int artistId)
+        {
+            var songs = await _songsServerice.GetSongsByArtistIdAsync(artistId);
 
             return Ok(_mapper.Map<IEnumerable<SongDto>>(songs));
         }
