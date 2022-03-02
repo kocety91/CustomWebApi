@@ -33,10 +33,10 @@ namespace CustomWebApi.Controllers
         }
 
 
-        [HttpGet("{id}", Name = "GetSongByArtistId")]
+        [HttpGet("{artistId}", Name = "GetSongsByArtistId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<SongDto>> GetSongByArtistId(int artistId)
+        public async Task<ActionResult<SongDto>> GetSongsByArtistId(int artistId)
         {
             var songs = await _songsServerice.GetSongsByArtistIdAsync(artistId);
 

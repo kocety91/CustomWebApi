@@ -4,8 +4,10 @@ namespace CustomWebApi.Dtos.Songs
 {
     public class SongDto
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
-        public ArtistDto Artist { get; set; }
+        public SongArtistDto Artist { get; set; }
     }
 }
