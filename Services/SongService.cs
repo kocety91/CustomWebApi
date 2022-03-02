@@ -18,6 +18,25 @@ namespace CustomWebApi.Services
         {
             _context = context;
         }
+
+        public async Task CreateAsync(Song song)
+        {
+           if (song == null)
+           {
+               throw new NullReferenceException(nameof(song));
+           }
+
+           var songExist = await _context.Songs.FirstOrDefaultAsync(x => x.Name == song.Name);
+
+           if (songExist != null)
+           {
+                throw new ArgumentException(SongAlreadyExists);
+           }
+
+            await _context.Songs.AddAsync(song);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Song>> GetAllSongsAsync()
         {
             var songs = await _context.Songs.Include(s => s.Artist).AsNoTracking().ToListAsync();

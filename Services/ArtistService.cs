@@ -25,7 +25,10 @@ namespace CustomWebApi.Services
                 throw new NullReferenceException(nameof(artist));
            }
 
-           if (_context.Artists.Any(x => x.FirstName == artist.FirstName && x.LastName == artist.LastName))
+            var artistExists = await _context.Artists
+                .FirstOrDefaultAsync(x => x.FirstName == artist.FirstName && x.LastName == artist.LastName);
+
+           if (artistExists !=  null)
            {
                 throw new ArgumentException(ArtistAlreadyExist);
            }

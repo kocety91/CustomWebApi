@@ -9,5 +9,7 @@ namespace CustomWebApi.Services.Contracts
         Task<IEnumerable<Song>> GetAllSongsAsync();
 
         Task<IEnumerable<Song>> GetSongsByArtistIdAsync(int artistId);
+
+        Task CreateAsync(Song song);
     }
 }

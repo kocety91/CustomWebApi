@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CustomWebApi.Dtos.Songs;
+using CustomWebApi.Models;
 using CustomWebApi.Services.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,14 +34,28 @@ namespace CustomWebApi.Controllers
         }
 
 
-        [HttpGet("{artistId}", Name = "GetSongsByArtistId")]
+        [HttpGet("{id}", Name = "GetSongsByArtistId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<SongDto>> GetSongsByArtistId(int artistId)
+        public async Task<ActionResult<SongDto>> GetSongsByArtistId(int id)
         {
-            var songs = await _songsServerice.GetSongsByArtistIdAsync(artistId);
+            var songs = await _songsServerice.GetSongsByArtistIdAsync(id);
 
             return Ok(_mapper.Map<IEnumerable<SongDto>>(songs));
+        }
+
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<SongDto>> Create(CreateSongDto source)
+        {
+            var dtoToSong = _mapper.Map<Song>(source);
+            await _songsServerice.CreateAsync(dtoToSong);
+
+            var redirectDto = _mapper.Map<SongDto>(dtoToSong);
+
+            return CreatedAtRoute(nameof(GetSongsByArtistId), new { id = redirectDto.Artist.Id }, redirectDto);
         }
     }
 }

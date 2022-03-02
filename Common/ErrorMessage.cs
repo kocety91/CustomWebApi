@@ -12,7 +12,7 @@
 
             public const string FirstNameIsRequired = "Artist firstname is required.";
 
-            public const string LastNameIsRequired = "Artist lastname is required";
+            public const string LastNameIsRequired = "Artist lastname is required.";
 
         }
 
@@ -23,6 +23,8 @@
             public const string SongDoesntExists = "This song doesn't exists.";
 
             public const string NoSongs = "No songs found.";
+
+            public const string NameIsRequired = "Name is required.";
 
         }
     }

@@ -9,6 +9,7 @@ namespace CustomWebApi.Profiles.Songs
         public SongsProfile()
         {
             CreateMap<Song, SongDto>();
+            CreateMap<CreateSongDto, Song>();
         }
     }
 }
