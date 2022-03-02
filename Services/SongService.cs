@@ -49,6 +49,18 @@ namespace CustomWebApi.Services
             return songs;
         }
 
+        public async Task<Song> GetByIdAsync(int id)
+        {
+            var song = await _context.Songs.Include(s => s.Artist).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+
+            if(song == null)
+            {
+                throw new ArgumentException(SongDoesntExists);
+            }
+
+            return song;
+        }
+
         public async Task<IEnumerable<Song>> GetSongsByArtistIdAsync(int artistId)
         {
             var songs = await _context.Songs.Where(x => x.ArtistId == artistId)
@@ -61,6 +73,17 @@ namespace CustomWebApi.Services
             }
 
             return songs;
+        }
+
+        public async Task UpdateAsync(Song song)
+        {
+            if (song == null)
+            {
+                throw new NullReferenceException(nameof(song));
+            }
+
+            _context.Songs.Update(song);
+            await _context.SaveChangesAsync();
         }
     }
 }

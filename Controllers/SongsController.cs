@@ -57,5 +57,17 @@ namespace CustomWebApi.Controllers
 
             return CreatedAtRoute(nameof(GetSongsByArtistId), new { id = redirectDto.Artist.Id }, redirectDto);
         }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> Update(int id, UpdateSongDto source)
+        {
+            var songForUpdate = await _songsServerice.GetByIdAsync(id);
+
+            _mapper.Map(source, songForUpdate);
+            await _songsServerice.UpdateAsync(songForUpdate);
+
+            return NoContent();
+        }
     }
 }
