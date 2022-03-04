@@ -3,6 +3,7 @@ using CustomWebApi.Dtos.Songs;
 using CustomWebApi.Models;
 using CustomWebApi.Services.Contracts;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -66,6 +67,26 @@ namespace CustomWebApi.Controllers
 
             _mapper.Map(source, songForUpdate);
             await _songsServerice.UpdateAsync(songForUpdate);
+
+            return NoContent();
+        }
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> PartialUpdate(int id, JsonPatchDocument<UpdateSongDto> patchDoc)
+        {
+            var song = await _songsServerice.GetByIdAsync(id);
+
+            var songToPatch = _mapper.Map<UpdateSongDto>(song);
+            patchDoc.ApplyTo(songToPatch, ModelState);
+
+            if (!TryValidateModel(songToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(songToPatch, song);
+            await _songsServerice.UpdateAsync(song);
 
             return NoContent();
         }
