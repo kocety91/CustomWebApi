@@ -37,6 +37,19 @@ namespace CustomWebApi.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(Song song)
+        {
+            var songForDelete = await _context.Songs.AsNoTracking().FirstOrDefaultAsync(x => x.Id == song.Id);
+
+            if (songForDelete == null)
+            {
+                throw new ArgumentException(SongDoesntExists);
+            }
+
+            _context.Songs.Remove(songForDelete);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Song>> GetAllSongsAsync()
         {
             var songs = await _context.Songs.Include(s => s.Artist).AsNoTracking().ToListAsync();

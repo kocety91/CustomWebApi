@@ -15,5 +15,7 @@ namespace CustomWebApi.Services.Contracts
         Task CreateAsync(Song song);
 
         Task UpdateAsync(Song song);
+
+        Task DeleteAsync(Song song);
     }
 }

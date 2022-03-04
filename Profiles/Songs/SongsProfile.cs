@@ -11,6 +11,7 @@ namespace CustomWebApi.Profiles.Songs
             CreateMap<Song, SongDto>();
             CreateMap<CreateSongDto, Song>();
             CreateMap<UpdateSongDto, Song>();
+            CreateMap<Song, UpdateSongDto>();
         }
     }
 }
