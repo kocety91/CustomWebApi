@@ -35,14 +35,14 @@ namespace CustomWebApi.Controllers
         }
 
 
-        [HttpGet("{id}", Name = "GetSongsByArtistId")]
+        [HttpGet("{id}", Name = "GetSongById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<SongDto>> GetSongsByArtistId(int id)
+        public async Task<ActionResult<SongDto>> GetSongById(int id)
         {
-            var songs = await _songsServerice.GetSongsByArtistIdAsync(id);
+            var songs = await _songsServerice.GetByIdAsync(id);
 
-            return Ok(_mapper.Map<IEnumerable<SongDto>>(songs));
+            return Ok(_mapper.Map<SongDto>(songs));
         }
 
 
@@ -56,7 +56,7 @@ namespace CustomWebApi.Controllers
 
             var redirectDto = _mapper.Map<SongDto>(dtoToSong);
 
-            return CreatedAtRoute(nameof(GetSongsByArtistId), new { id = redirectDto.Artist.Id }, redirectDto);
+            return CreatedAtRoute(nameof(GetSongById), new {id = redirectDto.Artist.Id }, redirectDto);
         }
 
         [HttpPut("{id}")]
@@ -92,6 +92,15 @@ namespace CustomWebApi.Controllers
         }
 
 
-       
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var song = await _songsServerice.GetByIdAsync(id);
+
+            await _songsServerice.DeleteAsync(song);
+
+            return NoContent();
+        }
     }
 }
