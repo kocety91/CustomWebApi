@@ -11,6 +11,6 @@ namespace CustomWebApi.Dtos.Artists
 
         public string LastName { get; set; }
 
-        public ICollection<SongDto> Songs { get; set; }
+        public ICollection<SongByArtistDto> Songs { get; set; }
     }
 }

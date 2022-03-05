@@ -23,6 +23,12 @@ namespace CustomWebApi.Data
                 .WithMany(a => a.Songs)
                 .HasForeignKey(s => s.ArtistId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Artist>()
+                .HasMany(a => a.Songs)
+                .WithOne(s => s.Artist)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

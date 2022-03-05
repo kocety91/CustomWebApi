@@ -58,6 +58,7 @@ namespace CustomWebApi.Controllers
 
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ArtistDto>> Update(int id, UpdateArtistDto source)
         {
             var artist = await _artistService.GetByIdAsync(id);
@@ -70,7 +71,6 @@ namespace CustomWebApi.Controllers
 
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-
         public async Task<ActionResult> PartialUpdate(int id, JsonPatchDocument<UpdateArtistDto> patchDoc)
         {
             var artist = await _artistService.GetByIdAsync(id);

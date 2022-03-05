@@ -53,6 +53,7 @@ namespace CustomWebApi
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddTransient<IArtistService, ArtistService>();
             services.AddTransient<ISongService, SongService>();
+            services.AddTransient<ExceptionHandlingMiddleware>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

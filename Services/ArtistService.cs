@@ -1,4 +1,5 @@
-﻿using CustomWebApi.Data;
+﻿using CustomWebApi.Common;
+using CustomWebApi.Data;
 using CustomWebApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,7 +27,8 @@ namespace CustomWebApi.Services
            }
 
             var artistExists = await _context.Artists
-                .FirstOrDefaultAsync(x => x.FirstName == artist.FirstName && x.LastName == artist.LastName);
+                .FirstOrDefaultAsync(x => x.FirstName == artist.FirstName
+                && x.LastName == artist.LastName);
 
            if (artistExists !=  null)
            {
@@ -39,7 +41,9 @@ namespace CustomWebApi.Services
 
         public async Task DeleteAsync(Artist artist)
         {
-            var deleteArtist = _context.Artists.FirstOrDefault(x => x.Id == artist.Id);
+            var deleteArtist = await _context.Artists
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == artist.Id);
 
             if (deleteArtist == null)
             {
@@ -52,7 +56,10 @@ namespace CustomWebApi.Services
 
         public async Task<IEnumerable<Artist>> GetAllAsync()
         {
-            var allArtists = await _context.Artists.Include(x => x.Songs).AsNoTracking().ToListAsync();
+            var allArtists = await _context.Artists
+                .Include(x => x.Songs)
+                .AsNoTracking()
+                .ToListAsync();
 
             if (allArtists == null)
             {
@@ -61,14 +68,17 @@ namespace CustomWebApi.Services
 
             return allArtists;
         }
-
+         
         public async Task<Artist> GetByIdAsync(int id)
         {
-            var artist = await _context.Artists.Include(x => x.Songs).AsNoTracking().FirstOrDefaultAsync();
+            var artist = await _context.Artists
+                .Include(x => x.Songs)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (artist == null)
             {
-                throw new ArgumentException(ArtistDoesntExist);
+                throw new NotFoundException(ArtistDoesntExist);
             }
 
             return artist;
@@ -78,7 +88,7 @@ namespace CustomWebApi.Services
         {
             if (artist == null)
             {
-                throw new ArgumentException(ArtistDoesntExist);
+                throw new NullReferenceException(ArtistDoesntExist);
             }
 
             _context.Artists.Update(artist);

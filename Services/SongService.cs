@@ -27,7 +27,8 @@ namespace CustomWebApi.Services
                throw new NullReferenceException(nameof(song));
            }
 
-           var songExist = await _context.Songs.FirstOrDefaultAsync(x => x.Name == song.Name);
+           var songExist = await _context.Songs
+                .FirstOrDefaultAsync(x => x.Name == song.Name);
 
            if (songExist != null)
            {
@@ -40,7 +41,9 @@ namespace CustomWebApi.Services
 
         public async Task DeleteAsync(Song song)
         {
-            var songForDelete = await _context.Songs.AsNoTracking().FirstOrDefaultAsync(x => x.Id == song.Id);
+            var songForDelete = await _context.Songs
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == song.Id);
 
             if (songForDelete == null)
             {
@@ -53,7 +56,10 @@ namespace CustomWebApi.Services
 
         public async Task<IEnumerable<Song>> GetAllSongsAsync()
         {
-            var songs = await _context.Songs.Include(s => s.Artist).AsNoTracking().ToListAsync();
+            var songs = await _context.Songs
+                .Include(s => s.Artist)
+                .AsNoTracking()
+                .ToListAsync();
 
             if ( songs == null)
             {
@@ -65,7 +71,10 @@ namespace CustomWebApi.Services
 
         public async Task<Song> GetByIdAsync(int id)
         {
-            var song = await _context.Songs.Include(s => s.Artist).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            var song = await _context.Songs
+                .Include(s => s.Artist)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if(song == null)
             {
@@ -77,7 +86,8 @@ namespace CustomWebApi.Services
 
         public async Task<IEnumerable<Song>> GetSongsByArtistIdAsync(int artistId)
         {
-            var songs = await _context.Songs.Where(x => x.ArtistId == artistId)
+            var songs = await _context.Songs
+                .Where(x => x.ArtistId == artistId)
                 .Include(x => x.Artist)
                 .ToListAsync();
 
