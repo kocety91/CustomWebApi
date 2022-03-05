@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CustomWebApi.Dtos.Artists;
 using CustomWebApi.Models;
-using CustomWebApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
