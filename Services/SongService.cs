@@ -1,4 +1,5 @@
-﻿using CustomWebApi.Data;
+﻿using CustomWebApi.Common;
+using CustomWebApi.Data;
 using CustomWebApi.Models;
 using CustomWebApi.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
@@ -68,7 +69,7 @@ namespace CustomWebApi.Services
 
             if(song == null)
             {
-                throw new ArgumentException(SongDoesntExists);
+                throw new NotFoundException(SongDoesntExists);
             }
 
             return song;

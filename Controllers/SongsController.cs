@@ -61,9 +61,15 @@ namespace CustomWebApi.Controllers
 
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Update(int id, UpdateSongDto source)
         {
             var songForUpdate = await _songsServerice.GetByIdAsync(id);
+
+            if (songForUpdate == null)
+            {
+                return this.NotFound();
+            }
 
             _mapper.Map(source, songForUpdate);
             await _songsServerice.UpdateAsync(songForUpdate);
@@ -73,9 +79,15 @@ namespace CustomWebApi.Controllers
 
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> PartialUpdate(int id, JsonPatchDocument<UpdateSongDto> patchDoc)
         {
             var song = await _songsServerice.GetByIdAsync(id);
+
+            if (song == null)
+            {
+                return this.NotFound();
+            }
 
             var songToPatch = _mapper.Map<UpdateSongDto>(song);
             patchDoc.ApplyTo(songToPatch, ModelState);

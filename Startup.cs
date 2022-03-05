@@ -1,5 +1,6 @@
 using AutoMapper;
 using CustomWebApi.Data;
+using CustomWebApi.Extensions;
 using CustomWebApi.Services;
 using CustomWebApi.Services.Contracts;
 using Microsoft.AspNetCore.Builder;
@@ -63,6 +64,8 @@ namespace CustomWebApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CustomWebApi v1"));
             }
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 
