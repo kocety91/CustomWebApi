@@ -1,10 +1,9 @@
 using AutoMapper;
 using CustomWebApi.Data;
 using CustomWebApi.Extensions;
-using CustomWebApi.Services;
-using CustomWebApi.Services.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +35,8 @@ namespace CustomWebApi
             services.AddDbContext<CustomWebApiContext>(opt => opt.UseSqlServer
            (Configuration.GetConnectionString("DefaultConnection")));
 
+            services.ConfigureCors();
+
             services.AddControllers();
             services.AddControllers().AddNewtonsoftJson(s =>
             {
@@ -51,9 +52,8 @@ namespace CustomWebApi
             });
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddTransient<IArtistService, ArtistService>();
-            services.AddTransient<ISongService, SongService>();
             services.AddTransient<ExceptionHandlingMiddleware>();
+            services.ConfigureRepositoryWrapper();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,7 +70,15 @@ namespace CustomWebApi
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.All
+            });
+
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 

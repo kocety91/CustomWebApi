@@ -1,5 +1,6 @@
 ﻿using CustomWebApi.Data;
 using CustomWebApi.Repository.Contracts;
+using System.Threading.Tasks;
 
 namespace CustomWebApi.Repository
 {
@@ -39,9 +40,9 @@ namespace CustomWebApi.Repository
             }
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            _repoContext.SaveChanges();
+            await _repoContext.SaveChangesAsync();
         }
     }
 }
