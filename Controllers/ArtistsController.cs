@@ -43,63 +43,71 @@ namespace CustomWebApi.Controllers
             return Ok(_mapper.Map<IEnumerable<ArtistDto>>(artists));
         }
 
-        //[HttpPost]
-        //[ProducesResponseType(StatusCodes.Status201Created)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //public async Task<ActionResult<ArtistDto>> Create(CreateArtistDto source)
-        //{
-        //    var dtoToProduct = _mapper.Map<Artist>(source);
-        //    await _artistService.CreateAsync(dtoToProduct);
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ArtistDto>> Create(CreateArtistDto source)
+        {
+            var dtoToProduct = _mapper.Map<Artist>(source);
 
-        //    var redirectDto = _mapper.Map<ArtistDto>(dtoToProduct);
+            _repoWrapper.Artist.CreateArtis(dtoToProduct);
+            await _repoWrapper.SaveAsync();
 
-        //    return CreatedAtRoute(nameof(GetById), new { id = redirectDto.Id }, redirectDto);
-        //}
+            var redirectDto = _mapper.Map<ArtistDto>(dtoToProduct);
 
-        //[HttpPut("{id}")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //public async Task<ActionResult<ArtistDto>> Update(int id, UpdateArtistDto source)
-        //{
-        //    var artist = await _artistService.GetByIdAsync(id);
+            return CreatedAtRoute(nameof(GetById), new { id = redirectDto.Id }, redirectDto);
+        }
 
-        //    _mapper.Map(source, artist);
-        //    await _artistService.UpdateAsync(artist);
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ArtistDto>> Update(int id, UpdateArtistDto source)
+        {
+            var artist = await _repoWrapper.Artist.GetArtisByIdAsync(id);
 
-        //    return NoContent();
-        //}
+            if (artist == null)
+            {
+                return this.NotFound();
+            }
 
-        //[HttpPatch("{id}")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //public async Task<ActionResult> PartialUpdate(int id, JsonPatchDocument<UpdateArtistDto> patchDoc)
-        //{
-        //    var artist = await _artistService.GetByIdAsync(id);
+            _mapper.Map(source, artist);
+            _repoWrapper.Artist.UpdateArtis(artist);
+            await _repoWrapper.SaveAsync();
+            return NoContent();
+        }
 
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> PartialUpdate(int id, JsonPatchDocument<UpdateArtistDto> patchDoc)
+        {
+            var artist = await _repoWrapper.Artist.GetArtisByIdAsync(id);
 
-        //    var artistToPatch = _mapper.Map<UpdateArtistDto>(artist);
-        //    patchDoc.ApplyTo(artistToPatch, ModelState);
+            var artistToPatch = _mapper.Map<UpdateArtistDto>(artist);
+            patchDoc.ApplyTo(artistToPatch, ModelState);
 
-        //    if (!TryValidateModel(artistToPatch))
-        //    {
-        //        return ValidationProblem(ModelState);
-        //    }
+            if (!TryValidateModel(artistToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
 
-        //    _mapper.Map(artistToPatch, artist);
-        //    await _artistService.UpdateAsync(artist);
+            _mapper.Map(artistToPatch, artist);
+            _repoWrapper.Artist.Update(artist);
+            await _repoWrapper.SaveAsync();
 
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
-        //[HttpDelete("{id}")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //public async Task<ActionResult> Delete(int id)
-        //{
-        //    var artist = await _artistService.GetByIdAsync(id);
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var artist = await _repoWrapper.Artist.GetArtisByIdAsync(id);
 
-        //    await _artistService.DeleteAsync(artist);
+            _repoWrapper.Artist.DeleteArtis(artist);
+            await _repoWrapper.SaveAsync();
 
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
     }
 }
