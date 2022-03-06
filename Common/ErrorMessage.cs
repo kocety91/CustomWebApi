@@ -28,6 +28,7 @@
 
             public const string IvalidReleaseDate = "Min year of release must be less than max year of release";
 
+            public const string NoSongWithThisArtis = "This artist don't have any songs.";
         }
     }
 }

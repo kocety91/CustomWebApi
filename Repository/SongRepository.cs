@@ -33,11 +33,11 @@ namespace CustomWebApi.Repository
         public PagedList<Song> GetAllSongs(SongParameters songParameters)
         {
             var songs = FindByCondition(s => s.ReleaseDate.Year >= songParameters.MinYearOfRelease &&
-                 s.ReleaseDate.Year <= songParameters.MaxYearOfRelease)
-                .OrderBy(s => s.ReleaseDate)
-                .Include(s => s.Artist);
+                 s.ReleaseDate.Year <= songParameters.MaxYearOfRelease);
 
-            return PagedList<Song>.ToPagedList(songs, songParameters.PageNumber,
+            SearchByArtistName(ref songs, songParameters.ArtistFirstName);
+
+            return PagedList<Song>.ToPagedList(songs.OrderBy(s => s.ReleaseDate).Include(s => s.Artist), songParameters.PageNumber,
             songParameters.PageSize);
         }
 
@@ -72,6 +72,14 @@ namespace CustomWebApi.Repository
             {
                 throw new ArgumentException(SongAlreadyExist);
             }
+        }
+
+        private void SearchByArtistName(ref IQueryable<Song> songs, string artistFirstName)
+        {
+            if (!songs.Any(x => x.Artist.FirstName == artistFirstName) || string.IsNullOrWhiteSpace(artistFirstName))
+                return;
+
+            songs = songs.Where(s => s.Artist.FirstName.ToLower().Contains(artistFirstName.Trim().ToLower()));
         }
     }
 }
