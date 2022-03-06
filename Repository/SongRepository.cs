@@ -1,6 +1,8 @@
-﻿using CustomWebApi.Data;
+﻿using CustomWebApi.Common;
+using CustomWebApi.Data;
 using CustomWebApi.Models;
 using CustomWebApi.Repository.Contracts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,19 +30,24 @@ namespace CustomWebApi.Repository
             Delete(song);
         }
 
-        public Task<IEnumerable<Song>> GetAllSongsAsync()
+        public async Task<IEnumerable<Song>> GetAllSongsAsync()
+         => await FindAll().OrderBy(x => x.Id).ToListAsync();
+
+        public async Task<Song> GetSongByIdAsync(int songId)
         {
-            throw new System.NotImplementedException();
+            var song = await FindByCondition(x => x.Id == songId).FirstOrDefaultAsync();
+
+            if (song == null)
+            {
+                throw new NotFoundException(SongDoesntExist);
+            }
+
+            return song;
         }
 
-        public Task<Song> GetSongByIdAsync(int songId)
+        public  void UpdateSong(Song song)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void UpdateSong(Song song)
-        {
-            throw new System.NotImplementedException();
+            Update(song);
         }
 
         private void CheckSong(Song song)
