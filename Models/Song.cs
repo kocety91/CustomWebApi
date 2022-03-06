@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CustomWebApi.Models
 {
@@ -9,6 +10,8 @@ namespace CustomWebApi.Models
 
         [Required]
         public string Name { get; set; }
+
+        public DateTime ReleaseDate { get; set; }
 
         public int ArtistId { get; set; }
 

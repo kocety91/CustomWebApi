@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static CustomWebApi.Common.ErrorMessage.Song;
 
 namespace CustomWebApi.Controllers
 {
@@ -30,6 +31,11 @@ namespace CustomWebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetAll([FromQuery] SongParameters songParameters)
         {
+            if (!songParameters.ValidYearRange)
+            {
+                return BadRequest(IvalidReleaseDate);
+            }
+
             var songs = _repoWrapper.Song.GetAllSongs(songParameters);
 
             var metadata = new
@@ -43,8 +49,9 @@ namespace CustomWebApi.Controllers
             };
 
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            var songsToDto = _mapper.Map<IEnumerable<SongDto>>(songs);
 
-            return Ok(songs);
+            return Ok(songsToDto);
         }
 
 

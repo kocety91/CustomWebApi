@@ -1,4 +1,5 @@
 ﻿using CustomWebApi.Dtos.Artists;
+using System;
 
 namespace CustomWebApi.Dtos.Songs
 {
@@ -7,6 +8,8 @@ namespace CustomWebApi.Dtos.Songs
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        public DateTime ReleaseDate { get; set; }
 
         public SongArtistDto Artist { get; set; }
     }

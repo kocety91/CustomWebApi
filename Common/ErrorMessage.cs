@@ -26,6 +26,8 @@
 
             public const string NameIsRequired = "Name is required.";
 
+            public const string IvalidReleaseDate = "Min year of release must be less than max year of release";
+
         }
     }
 }

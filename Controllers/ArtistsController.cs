@@ -37,7 +37,7 @@ namespace CustomWebApi.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetAll([FromQuery] ArtistParameters artistParameters)
+        public ActionResult GetAll([FromQuery] ArtistParameters artistParameters)
         {
             var artists =  _repoWrapper.Artist.GetAllArtists(artistParameters);
 
@@ -51,9 +51,13 @@ namespace CustomWebApi.Controllers
                 artists.HasPrevious
             };
 
+            var artistsToDto = _mapper.Map<IEnumerable<ArtistDto>>(artists);
+
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-            return Ok(artists);
+
+
+            return Ok(artistsToDto);
         }
 
         [HttpPost]

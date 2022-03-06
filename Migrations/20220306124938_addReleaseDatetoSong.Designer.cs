@@ -4,14 +4,16 @@ using CustomWebApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CustomWebApi.Migrations
 {
     [DbContext(typeof(CustomWebApiContext))]
-    partial class CustomWebApiContextModelSnapshot : ModelSnapshot
+    [Migration("20220306124938_addReleaseDatetoSong")]
+    partial class addReleaseDatetoSong
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -32,8 +32,12 @@ namespace CustomWebApi.Repository
 
         public PagedList<Song> GetAllSongs(SongParameters songParameters)
         {
-            return PagedList<Song>.ToPagedList(FindAll().OrderBy(x => x.Id)
-            .Include(x => x.Artist), songParameters.PageNumber,
+            var songs = FindByCondition(s => s.ReleaseDate.Year >= songParameters.MinYearOfRelease &&
+                 s.ReleaseDate.Year <= songParameters.MaxYearOfRelease)
+                .OrderBy(s => s.ReleaseDate)
+                .Include(s => s.Artist);
+
+            return PagedList<Song>.ToPagedList(songs, songParameters.PageNumber,
             songParameters.PageSize);
         }
 
