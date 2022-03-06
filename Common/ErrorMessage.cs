@@ -18,9 +18,9 @@
 
         public static class Song
         {
-            public const string SongAlreadyExists = "Song you want to add already exists.";
+            public const string SongAlreadyExist = "Song you want to add already exists.";
 
-            public const string SongDoesntExists = "This song doesn't exists.";
+            public const string SongDoesntExist = "This song doesn't exists.";
 
             public const string NoSongs = "No songs found.";
 
