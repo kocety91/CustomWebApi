@@ -31,11 +31,11 @@ namespace CustomWebApi.Repository
         }
 
         public async Task<IEnumerable<Song>> GetAllSongsAsync()
-         => await FindAll().OrderBy(x => x.Id).ToListAsync();
+         => await FindAll().OrderBy(x => x.Id).Include(x => x.Artist).ToListAsync();
 
         public async Task<Song> GetSongByIdAsync(int songId)
         {
-            var song = await FindByCondition(x => x.Id == songId).FirstOrDefaultAsync();
+            var song = await FindByCondition(x => x.Id == songId).Include(x => x.Artist).FirstOrDefaultAsync();
 
             if (song == null)
             {
