@@ -5,6 +5,7 @@ using CustomWebApi.Repository.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -36,11 +37,23 @@ namespace CustomWebApi.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<ArtistDto>>> GetAll()
+        public IActionResult GetAll([FromQuery] ArtistParameters artistParameters)
         {
-            var artists = await _repoWrapper.Artist.GetAllArtissAsync();
+            var artists =  _repoWrapper.Artist.GetAllArtists(artistParameters);
 
-            return Ok(_mapper.Map<IEnumerable<ArtistDto>>(artists));
+            var metadata = new
+            {
+                artists.TotalCount,
+                artists.PageSize,
+                artists.CurrentPage,
+                artists.TotalPages,
+                artists.HasNext,
+                artists.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            return Ok(artists);
         }
 
         [HttpPost]

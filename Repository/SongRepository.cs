@@ -30,8 +30,12 @@ namespace CustomWebApi.Repository
             Delete(song);
         }
 
-        public async Task<IEnumerable<Song>> GetAllSongsAsync()
-         => await FindAll().OrderBy(x => x.Id).Include(x => x.Artist).ToListAsync();
+        public PagedList<Song> GetAllSongs(SongParameters songParameters)
+        {
+            return PagedList<Song>.ToPagedList(FindAll().OrderBy(x => x.Id)
+            .Include(x => x.Artist), songParameters.PageNumber,
+            songParameters.PageSize);
+        }
 
         public async Task<Song> GetSongByIdAsync(int songId)
         {

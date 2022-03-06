@@ -6,7 +6,7 @@ namespace CustomWebApi.Repository.Contracts
 {
     public interface ISongRepository : IRepositoryBase<Song>
     {
-        Task<IEnumerable<Song>> GetAllSongsAsync();
+        PagedList<Song> GetAllSongs(SongParameters songParameters);
         Task<Song> GetSongByIdAsync(int songId);
         void CreateSong(Song song);
         void UpdateSong(Song song);
