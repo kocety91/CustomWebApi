@@ -4,7 +4,6 @@ using CustomWebApi.Models;
 using CustomWebApi.Repository.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static CustomWebApi.Common.ErrorMessage.Artist;
@@ -54,7 +53,7 @@ namespace CustomWebApi.Repository
             Update(artist);
         }
         
-        protected void CheckArtist(Artist artist)
+        private void CheckArtist(Artist artist)
         {
             if (artist == null)
             {
@@ -70,5 +69,6 @@ namespace CustomWebApi.Repository
                 throw new ArgumentException(ArtistAlreadyExist);
             }
         }
+
     }
 }
